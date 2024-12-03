@@ -1,6 +1,8 @@
 import express from "express";
 import authRoutes from "./routes/authRoutes.js"
 import userRoutes from "./routes/userRoutes.js"
+import postRoutes from "./routes/postRoutes.js"
+import notificationRoutes from "./routes/notificationRoutes.js"
 import * as dotenv from "dotenv"
 import Connection from "./db/Connection.js";
 import cookieParser from "cookie-parser";
@@ -21,8 +23,13 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
+app.get("/", (req,res) => {
+    res.send({message: "Hello World"})
+})
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/posts", postRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.listen(PORT, async() => {
     console.log(`localhost:${PORT}`)

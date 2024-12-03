@@ -1,7 +1,7 @@
-import { NotificationModel } from "../models/notificationModel.js";
 import { UserModel } from "../models/UserModel.js";
 import bcrypt from "bcryptjs";
 import {v2 as cloudinary} from "cloudinary";
+import { NotificationModel } from "../models/notificationModel.js";
 
 
 
