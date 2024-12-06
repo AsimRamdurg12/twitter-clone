@@ -97,7 +97,9 @@ export const likePost = async(req, res) => {
     if(userLikePost){
         await PostModel.updateOne({_id: postId}, {$pull: {likes: userId}});
         await UserModel.updateOne({_id: userId}, {$pull: {likedPosts: postId}})
-        res.status(200).json({message: "Unliked"})
+
+        const updatedLikes = post.likes.filter((id) => id.toString() !== userId.toString())
+        res.status(200).json(updatedLikes);
 
     }else{
         post.likes.push(userId);
@@ -113,7 +115,8 @@ export const likePost = async(req, res) => {
 
         await notification.save();
 
-        res.status(201).json({message:"Post liked"})
+        const updatedLikes = post.likes;
+        res.status(201).json(updatedLikes)
     }
  } catch (error) {
     console.log(`error in likedPost: ${error.message}`);

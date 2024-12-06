@@ -20,7 +20,7 @@ const MONGO_URL = process.env.MONGO_URL;
 const PORT = process.env.PORT || 3000;
 
 const app = express();
-app.use(express.json());
+app.use(express.json({limit: "10mb"}));
 app.use(cookieParser());
 
 app.get("/", (req,res) => {
