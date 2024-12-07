@@ -29,7 +29,6 @@ export const getAllPosts = async(req, res) => {
 export const getUserPosts = async(req, res) => {
    try {
     
-   
     const { username } = req.params;
 
     const user = await UserModel.findOne({username});
@@ -37,7 +36,7 @@ export const getUserPosts = async(req, res) => {
     if(!user) return res.status(400).json({error: "User not found"});
 
 
-    const postsByUser = await PostModel.find({user: user._id}).sort({createdAt: -1}).populate({
+    const posts = await PostModel.find({user: user._id}).sort({createdAt: -1}).populate({
         path: "user",
         select: "-password"
     }).populate({
@@ -45,7 +44,7 @@ export const getUserPosts = async(req, res) => {
         select: "-password"
     })
 
-    res.status(200).json(postsByUser);
+    res.status(200).json(posts);
     } catch (error) {
     console.log(`error in getUserPost: ${error.message}`);
         res.status(500).json({error: "Internal server error"})
@@ -195,7 +194,7 @@ try {
         select: "-password"
     })
 
-res.status(200).json({likedPosts})
+res.status(200).json(likedPosts)
 } catch (error) {
      console.log(`error in getLikedPost: ${error.message}`);
         res.status(500).json({error: "Internal server error"})

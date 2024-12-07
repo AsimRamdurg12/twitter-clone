@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import LoadingSpinner from "./LoadingSpinner";
+import { formatPostDate } from "../util";
 
 const Post = ({ post }) => {
   const [comment, setComment] = useState("");
@@ -46,7 +47,6 @@ const Post = ({ post }) => {
         });
 
         const data = await res.json();
-        console.log(data);
 
         if (!res.ok) throw new Error(data.error || "Something went wrong");
 
@@ -71,11 +71,40 @@ const Post = ({ post }) => {
     },
   });
 
+  const { mutate: commentPost, isPending: isCommenting } = useMutation({
+    mutationFn: async () => {
+      try {
+        const res = await fetch(`api/posts/comment/${post._id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ text: comment }),
+        });
+
+        const data = await res.json();
+        console.log(data);
+
+        if (!res.ok) throw new Error(data.error || "Something went wrong");
+
+        return data;
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
+    onSuccess: () => {
+      toast.success("Comment added successfully");
+      setComment("");
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   const isMyPost = data._id === post.user._id;
 
-  const formattedDate = "1h";
-
-  const isCommenting = false;
+  const formattedDate = formatPostDate(post.createdAt);
 
   const handleDeletePost = () => {
     mutate();
@@ -83,6 +112,8 @@ const Post = ({ post }) => {
 
   const handlePostComment = (e) => {
     e.preventDefault();
+    if (isCommenting) return;
+    commentPost();
   };
 
   const handleLikePost = (e) => {
@@ -195,7 +226,7 @@ const Post = ({ post }) => {
                     onSubmit={handlePostComment}
                   >
                     <textarea
-                      className="textarea w-full p-1 rounded text-md resize-none border focus:outline-none  border-gray-800"
+                      className="textarea w-full p-1 rounded text-md resize-none border focus:outline-none border-gray-800"
                       placeholder="Add a comment..."
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
@@ -214,7 +245,7 @@ const Post = ({ post }) => {
                 </form>
               </dialog>
               <div className="flex gap-1 items-center group cursor-pointer">
-                <BiRepost className="w-6 h-6  text-slate-500 group-hover:text-green-500" />
+                <BiRepost className="w-6 h-6 text-slate-500 group-hover:text-green-500" />
                 <span className="text-sm text-slate-500 group-hover:text-green-500">
                   0
                 </span>

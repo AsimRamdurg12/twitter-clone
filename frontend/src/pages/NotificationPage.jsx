@@ -4,32 +4,52 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const NotificationPage = () => {
-  const isLoading = false;
-  const notifications = [
-    {
-      _id: "1",
-      from: {
-        _id: "1",
-        username: "johndoe",
-        profileImg: "/boy2.png",
-      },
-      type: "follow",
+  const queryClient = useQueryClient();
+
+  const { data: notifications, isLoading } = useQuery({
+    queryKey: ["notifications"],
+    queryFn: async () => {
+      try {
+        const res = await fetch("/api/notifications");
+        const data = await res.json();
+
+        console.log(data);
+
+        if (!res.ok) throw new Error(data.error);
+
+        return data;
+      } catch (error) {
+        throw new Error(error.message);
+      }
     },
-    {
-      _id: "2",
-      from: {
-        _id: "2",
-        username: "janedoe",
-        profileImg: "/girl1.png",
-      },
-      type: "like",
+  });
+
+  const { mutate: deletenotifications } = useMutation({
+    mutationFn: async () => {
+      try {
+        const res = await fetch("api/notifications", {
+          method: "DELETE",
+        });
+
+        const data = await res.json();
+
+        console.log(data);
+
+        if (!res.ok) throw new Error(data.error);
+
+        return data;
+      } catch (error) {
+        throw new Error(data);
+      }
     },
-  ];
+  });
 
   const deleteNotifications = () => {
-    alert("All notifications deleted");
+    deletenotifications();
+    queryClient.invalidateQueries({ queryKey: ["notifications"] });
   };
 
   return (

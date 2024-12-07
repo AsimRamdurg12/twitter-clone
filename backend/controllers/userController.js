@@ -1,14 +1,14 @@
 import { UserModel } from "../models/UserModel.js";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import {v2 as cloudinary} from "cloudinary";
 import { NotificationModel } from "../models/notificationModel.js";
 
 
 
 export const getUserProfile = async (req, res) => {
-try {
     const {username} = req.params;
-
+    
+    try {
     const user = await UserModel.findOne({username}).select("-password");
 
     if(!user){
@@ -16,7 +16,7 @@ try {
             error: "User not found"
         })
     }
-
+    
     res.status(200).json(user);
 } catch (error) {
     console.log(`Error in getUserProfile: ${error.message}`);
@@ -104,8 +104,8 @@ export const getSuggestedUsers = async(req, res) => {
 
 
 export const updateUserProfile = async(req, res) => {
-    const {fullname, username, email, currentPassword, newPassword, bio, link} = req.body;
-    const {profileImg, coverImg} = req.body;
+    let {fullname, username, email, currentPassword, newPassword, bio, link} = req.body;
+    let {profileImg, coverImg} = req.body;
 
     const userId = req.user._id;
     
@@ -123,9 +123,12 @@ export const updateUserProfile = async(req, res) => {
             const isMatch = await bcrypt.compare(currentPassword, user.password);
             if(!isMatch) return res.status(400).json({error: "Current Password does not match"});
             if(newPassword.length < 8) return res.status(400).json({error: "Password must be 8 characters long."})
+               
+               
+            // const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(newPassword, 10);
         }
 
-        user.password = bcrypt.hash(newPassword, 10);
 
         if(profileImg){
             if(user.profileImg) {
@@ -151,7 +154,7 @@ export const updateUserProfile = async(req, res) => {
         user.profileImg = profileImg || user.profileImg;
         user.coverImg = coverImg || user.coverImg;
 
-        user = await UserModel.save();
+        user = await user.save();
 
         user.password = null;
 
