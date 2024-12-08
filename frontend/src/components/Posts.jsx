@@ -7,13 +7,13 @@ const Posts = ({ feedType, username, userId }) => {
   const getPostendPoint = () => {
     switch (feedType) {
       case "forYou":
-        return "http://localhost:3000/api/posts/all";
+        return "/api/posts/all";
       case "following":
-        return "http://localhost:3000/api/posts/following";
+        return "/api/posts/following";
       case "posts":
-        return `http://localhost:3000/api/posts/user/${username}`;
+        return `/api/posts/user/${username}`;
       case "likes":
-        return `http://localhost:3000/api/posts/likes/${userId}`;
+        return `/api/posts/likes/${userId}`;
       default:
         return "/api/posts/all";
     }

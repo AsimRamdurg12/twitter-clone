@@ -1,7 +1,7 @@
 import { json } from "express";
 import { generateTokenAndSetCookie } from "../lib/utils/generateToken.js";
 import { UserModel } from "../models/UserModel.js";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 
 export const signup = async(req, res) => {
     try {

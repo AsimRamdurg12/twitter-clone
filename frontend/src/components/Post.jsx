@@ -49,7 +49,8 @@ const Post = ({ post }) => {
         const data = await res.json();
 
         if (!res.ok) throw new Error(data.error || "Something went wrong");
-
+        console.log(res);
+        console.log(data);
         return data;
       } catch (error) {
         throw new Error(error);
@@ -57,6 +58,7 @@ const Post = ({ post }) => {
     },
 
     onSuccess: (updatedLikes) => {
+      // queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.setQueryData(["posts"], (oldData) => {
         return oldData.map((p) => {
           if (p._id === post._id) {
@@ -116,8 +118,7 @@ const Post = ({ post }) => {
     commentPost();
   };
 
-  const handleLikePost = (e) => {
-    e.preventDefault();
+  const handleLikePost = () => {
     if (isLiking) return;
     likePost();
   };
@@ -267,7 +268,7 @@ const Post = ({ post }) => {
                     isLiked ? "text-pink-500" : " text-slate-500"
                   }`}
                 >
-                  {post.likes.length}
+                  {post?.likes.length}
                 </span>
               </div>
             </div>
