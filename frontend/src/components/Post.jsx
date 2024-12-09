@@ -64,6 +64,8 @@ const Post = ({ post }) => {
           if (p._id === post._id) {
             return { ...p, likes: updatedLikes };
           }
+          console.log(oldData);
+
           return p;
         });
       });
