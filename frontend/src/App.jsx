@@ -15,7 +15,6 @@ import LoadingSpinner from "./components/common/LoadingSpinner";
 
 function App() {
   const { data: authUser, isLoading } = useQuery({
-    // we use queryKey to give a unique name to our query and refer to it later
     queryKey: ["authUser"],
     queryFn: async () => {
       try {
@@ -44,7 +43,6 @@ function App() {
 
   return (
     <div className="flex max-w-6xl mx-auto">
-      {/* Common component, bc it's not wrapped with Routes */}
       {authUser && <Sidebar />}
       <Routes>
         <Route
