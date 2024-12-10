@@ -12,6 +12,6 @@ const RightPanelSkeleton = () => {
 				</div>
 			</div>
 		</div>
-	);
+	)
 };
 export default RightPanelSkeleton;
