@@ -93,6 +93,6 @@ const NotificationPage = () => {
 				))}
 			</div>
 		</>
-	);
+	)
 };
 export default NotificationPage;
