@@ -121,6 +121,6 @@ const EditProfileModal = ({ authUser }) => {
 				</form>
 			</dialog>
 		</>
-	);
+	)
 };
 export default EditProfileModal;
