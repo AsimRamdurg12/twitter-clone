@@ -42,7 +42,7 @@ const Posts = ({ feedType, username, userId }) => {
         throw new Error(error);
       }
     },
-  });
+  })
 
   useEffect(() => {
     refetch();
