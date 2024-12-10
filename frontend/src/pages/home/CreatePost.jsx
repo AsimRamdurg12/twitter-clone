@@ -105,6 +105,6 @@ const CreatePost = () => {
 				{isError && <div className='text-red-500'>{error.message}</div>}
 			</form>
 		</div>
-	);
+	)
 };
 export default CreatePost;
