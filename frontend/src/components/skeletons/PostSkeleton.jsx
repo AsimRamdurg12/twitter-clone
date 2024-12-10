@@ -10,6 +10,6 @@ const PostSkeleton = () => {
 			</div>
 			<div className='skeleton h-40 w-full'></div>
 		</div>
-	);
+	)
 };
 export default PostSkeleton;
