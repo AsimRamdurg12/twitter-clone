@@ -36,6 +36,6 @@ const useUpdateUserProfile = () => {
 	});
 
 	return { updateProfile, isUpdatingProfile };
-};
+}
 
 export default useUpdateUserProfile;
